@@ -1,20 +1,69 @@
+/*
+ * Footer: navy legal bar — copyright (left) + legal links (right).
+ * Values measured from the Color & Trim reference footer at 1440px:
+ *   bar full width, navy, padding 20px 56px; white 12px text;
+ *   copyright margin 12px 0; link list top-aligned, gap 18px; no hover effects.
+ */
+
 footer {
-  background-color: var(--light-color);
+  --footer-bg: var(--brand-navy);
+  --footer-fg: #fff;
+
+  background-color: var(--footer-bg);
+  color: var(--footer-fg);
   font-size: var(--body-font-size-xs);
 }
 
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+footer .footer-bar {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px 15px;
 }
 
-footer .footer p {
+footer .footer-bar p {
   margin: 0;
+  line-height: 14px;
+}
+
+footer .footer-bar ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: 14px;
+}
+
+footer .footer-bar a:any-link,
+footer .footer-bar a:hover {
+  color: var(--footer-fg);
+  text-decoration: none;
+}
+
+/* mobile: 24px-tall tap targets */
+footer .footer-bar a:any-link {
+  display: inline-block;
+  padding: 5px 0;
 }
 
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0;
+    padding: 20px 56px;
+  }
+
+  footer .footer-bar p {
+    margin: 12px 0;
+  }
+
+  footer .footer-bar a:any-link {
+    display: inline;
+    padding: 0;
   }
 }
