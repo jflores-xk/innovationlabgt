@@ -2,33 +2,14 @@
 /* global WebImporter */
 /**
  * Parser for color-trim. Base: color-trim (custom). Source: http://127.0.0.1:8765/bronco.html
- * Source DOM: details.trim[open?] > summary > h2 ; div.trim-body > div.tabs > button* (skipped)
+ * Source DOM: details.trim[open?] > summary > h2 ; div.trim-body > div.tabs > button[data-tab]
  *   ; div.tab-panel#{trim}-{category} > h3.sr-only (skipped) + ul.swatch-grid > li.swatch
  *   > img + p.swatch-name ("Name*,** " + span.swatch-code "(CODE)").
  * xwalk container block (see blocks/color-trim/_color-trim.json + color-trim.js):
  *   block rows (1 cell): title | expanded (true/false)
- *   item rows (4 cells): category | image (+imageAlt collapsed) | swatchName | code
+ *   tab item rows (1 cell): tabTitle — starts a new tab
+ *   swatch item rows (3 cells): image (+imageAlt collapsed) | swatchName | code
  */
-const CATEGORY_KEYS = ['exterior', 'interior', 'upholstery', 'wheels'];
-
-function resolveCategory(panel) {
-  const id = (panel.id || '').toLowerCase();
-  const suffix = id.includes('-') ? id.slice(id.lastIndexOf('-') + 1) : id;
-  if (CATEGORY_KEYS.includes(suffix)) return suffix;
-  // tolerate plural / alternate suffixes (e.g. "interiors", "upholsteries", "wheel")
-  if (/^exterior/.test(suffix)) return 'exterior';
-  if (/^interior/.test(suffix)) return 'interior';
-  if (/^upholster/.test(suffix)) return 'upholstery';
-  if (/^wheel/.test(suffix)) return 'wheels';
-  // fallback: hidden panel heading text
-  const label = (panel.querySelector('h3, h4')?.textContent || '').toLowerCase();
-  if (label.includes('exterior')) return 'exterior';
-  if (label.includes('interior')) return 'interior';
-  if (label.includes('upholster')) return 'upholstery';
-  if (label.includes('wheel')) return 'wheels';
-  return 'exterior';
-}
-
 const clean = (s) => (s || '').replace(/\s+/g, ' ').trim();
 
 function hinted(document, field, content) {
@@ -36,6 +17,14 @@ function hinted(document, field, content) {
   frag.appendChild(document.createComment(` field:${field} `));
   frag.appendChild(typeof content === 'string' ? document.createTextNode(content) : content);
   return frag;
+}
+
+/** tab label for a panel: its tab button text, falling back to the hidden panel heading */
+function tabLabel(element, panel) {
+  const button = panel.id
+    ? element.querySelector(`[role="tab"][data-tab="${panel.id}"], [role="tab"][aria-controls="${panel.id}"]`)
+    : null;
+  return clean(button?.textContent) || clean(panel.querySelector('h3, h4')?.textContent);
 }
 
 export default function parse(element, { document }) {
@@ -50,10 +39,13 @@ export default function parse(element, { document }) {
   cells.push([title ? hinted(document, 'title', title) : '']);
   cells.push([hinted(document, 'expanded', expanded)]);
 
-  // item rows: one per li.swatch across all tab panels (tabs buttons + sr-only headings skipped)
+  // one tab item per panel, followed by that panel's swatch items
+  // (tab buttons and sr-only headings are not emitted as content)
   const scopes = panels.length ? panels : [element];
   scopes.forEach((panel) => {
-    const category = panels.length ? resolveCategory(panel) : 'exterior';
+    const label = panels.length ? tabLabel(element, panel) : '';
+    if (label) cells.push([hinted(document, 'tabTitle', label)]);
+
     panel.querySelectorAll('li.swatch').forEach((swatch) => {
       const img = swatch.querySelector('img');
       const nameEl = swatch.querySelector('.swatch-name');
@@ -68,7 +60,6 @@ export default function parse(element, { document }) {
       const code = clean(codeEl?.textContent).replace(/^\((.*)\)$/, '$1').trim();
 
       cells.push([
-        hinted(document, 'category', category),
         img ? hinted(document, 'image', img) : '',
         name ? hinted(document, 'swatchName', name) : '',
         code ? hinted(document, 'code', code) : '',

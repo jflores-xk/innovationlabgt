@@ -193,6 +193,22 @@
           }
         },
         {
+          "title": "Color Trim Tab",
+          "id": "color-trim-tab",
+          "plugins": {
+            "xwalk": {
+              "page": {
+                "resourceType": "core/franklin/components/block/v1/block/item",
+                "template": {
+                  "name": "Tab",
+                  "model": "color-trim-tab",
+                  "tabTitle": "Tab Title"
+                }
+              }
+            }
+          }
+        },
+        {
           "title": "Color Trim Swatch",
           "id": "color-trim-swatch",
           "plugins": {
@@ -202,7 +218,6 @@
                 "template": {
                   "name": "Swatch",
                   "model": "color-trim-swatch",
-                  "category": "exterior",
                   "swatchName": "Swatch Name",
                   "code": "XX"
                 }

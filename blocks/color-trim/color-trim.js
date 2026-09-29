@@ -1,13 +1,14 @@
 /*
  * Color Trim Block
- * One collapsible panel per vehicle trim. Child swatch rows are grouped by
- * category into tabs, each tab rendering a grid of swatches (image + name + code).
- * Collapse pattern borrowed from the accordion block, category switching from tabs,
- * and the swatch grid from cards.
+ * One collapsible panel per vehicle trim, containing authorable tabs. Each tab
+ * item starts a new tab; the swatch items that follow it render in that tab's
+ * grid (image + name + code). Collapse pattern borrowed from the accordion block,
+ * tab switching from tabs, and the swatch grid from cards.
  *
  * Authored rows (xwalk container block):
  *   block fields  -> single-cell rows: title, expanded (true/false)
- *   swatch items  -> multi-cell rows: category | image (+alt) | swatchName | code
+ *   tab items     -> single-cell rows: tabTitle
+ *   swatch items  -> multi-cell rows: image (+alt) | swatchName | code
  */
 
 import { createOptimizedPicture } from '../../scripts/aem.js';
@@ -16,13 +17,8 @@ import { moveInstrumentation } from '../../scripts/scripts.js';
 // "expanded" as a class token (DA: "Color Trim (expanded)") opens the panel by default
 const OPTION_CLASSES = ['expanded'];
 
-// fixed tab order; empty categories are skipped
-const CATEGORIES = [
-  { key: 'exterior', label: 'Exterior Colors', match: /^exterior/ },
-  { key: 'interior', label: 'Interiors', match: /^interior/ },
-  { key: 'upholstery', label: 'Upholsteries', match: /^upholster/ },
-  { key: 'wheels', label: 'Wheels', match: /^wheel/ },
-];
+// label for swatches authored before the first tab item
+const DEFAULT_TAB_LABEL = 'Colors';
 
 const FLAG = /^(true|false|yes|no)$/i;
 
@@ -30,12 +26,6 @@ let blockCount = 0;
 let editorListenerAttached = false;
 
 const textOf = (el) => (el ? el.textContent.replace(/\s+/g, ' ').trim() : '');
-
-function resolveCategory(value) {
-  const v = (value || '').toLowerCase();
-  if (!v) return null;
-  return CATEGORIES.find((c) => c.match.test(v)) || null;
-}
 
 function isItemRow(row) {
   return row.children.length > 1 || !!row.querySelector('picture, img');
@@ -52,15 +42,9 @@ function moveCellInstrumentation(cell, target) {
 
 function parseItem(row) {
   const cells = [...row.children];
-  const imageCell = cells.find((c) => c.querySelector('picture, img'));
-  const textCells = cells.filter((c) => c !== imageCell);
-
-  // xwalk renders every field as a cell, so category is positional when all cells exist;
-  // otherwise look for the cell whose value is a known category
-  const categoryCell = textCells.length >= 3
-    ? textCells[0]
-    : textCells.find((c) => resolveCategory(textOf(c)));
-  const [nameCell, codeCell] = textCells.filter((c) => c !== categoryCell);
+  const imageCell = cells.find((c) => c.querySelector('picture, img'))
+    || (cells.length > 2 ? cells[0] : null);
+  const [nameCell, codeCell] = cells.filter((c) => c !== imageCell);
 
   let name = textOf(nameCell);
   let code = textOf(codeCell).replace(/^\((.*)\)$/, '$1').trim();
@@ -72,7 +56,6 @@ function parseItem(row) {
 
   return {
     row,
-    category: resolveCategory(textOf(categoryCell)) || CATEGORIES[0],
     img: imageCell?.querySelector('img') || null,
     name,
     code,
@@ -130,8 +113,8 @@ function setExpanded(toggle, body, expanded) {
 }
 
 /**
- * In Universal Editor, selecting a swatch in the content tree should reveal it:
- * expand its trim panel and activate its category tab.
+ * In Universal Editor, selecting a tab or swatch in the content tree should reveal it:
+ * expand its trim panel and activate its tab (or the tab itself when a tab is selected).
  */
 function attachEditorSelection() {
   if (editorListenerAttached) return;
@@ -147,6 +130,10 @@ function attachEditorSelection() {
     const toggle = block.querySelector('.color-trim-toggle');
     const body = block.querySelector('.color-trim-body');
     if (toggle && body) setExpanded(toggle, body, true);
+    if (el.getAttribute('role') === 'tab') {
+      el.click();
+      return;
+    }
     const panel = el.closest('[role="tabpanel"]');
     if (panel) document.getElementById(panel.getAttribute('aria-labelledby'))?.click();
   });
@@ -157,12 +144,25 @@ export default function decorate(block) {
   const id = `color-trim-${blockCount}`;
   const active = [...block.classList].filter((c) => OPTION_CLASSES.includes(c));
 
+  // leading single-cell rows are the block fields (title, expanded flag); any later
+  // single-cell row is a tab item that starts a new group of swatches
   const rows = [...block.children];
-  const configRows = rows.filter((r) => !isItemRow(r));
-  const items = rows.filter(isItemRow).map(parseItem);
+  let titleRow;
+  let flagRow;
+  const groups = [];
+  rows.forEach((row, index) => {
+    if (isItemRow(row)) {
+      if (!groups.length) groups.push({ tabRow: null, label: DEFAULT_TAB_LABEL, items: [] });
+      groups[groups.length - 1].items.push(parseItem(row));
+    } else if (index < 2 && !flagRow && FLAG.test(textOf(row))) {
+      flagRow = row;
+    } else if (index === 0) {
+      titleRow = row;
+    } else {
+      groups.push({ tabRow: row, label: textOf(row), items: [] });
+    }
+  });
 
-  const titleRow = configRows.find((r) => !FLAG.test(textOf(r)));
-  const flagRow = configRows.find((r) => r !== titleRow && FLAG.test(textOf(r)));
   const expanded = active.includes('expanded') || /^(true|yes)$/i.test(textOf(flagRow));
 
   // --- collapsible header (h2 > button) ---
@@ -198,28 +198,35 @@ export default function decorate(block) {
   body.setAttribute('role', 'region');
   body.setAttribute('aria-labelledby', toggle.id);
 
-  const groups = CATEGORIES
-    .map((category) => ({ category, items: items.filter((it) => it.category === category) }))
-    .filter((g) => g.items.length);
-
   if (groups.length) {
     const tablist = document.createElement('div');
     tablist.className = 'color-trim-tabs';
     tablist.setAttribute('role', 'tablist');
     const titleText = textOf(title);
-    if (titleText) tablist.setAttribute('aria-label', `${titleText} categories`);
+    if (titleText) tablist.setAttribute('aria-label', `${titleText} options`);
 
     const tabs = [];
     const panels = [];
-    groups.forEach(({ category, items: groupItems }, i) => {
-      const tabId = `${id}-tab-${category.key}`;
-      const panelId = `${id}-panel-${category.key}`;
+    groups.forEach(({ tabRow, label, items: groupItems }, i) => {
+      const tabId = `${id}-tab-${i + 1}`;
+      const panelId = `${id}-panel-${i + 1}`;
 
       const tab = document.createElement('button');
       tab.type = 'button';
       tab.className = 'color-trim-tab';
       tab.id = tabId;
-      tab.textContent = category.label;
+      if (tabRow) {
+        // tab item instrumentation on the button, the tabTitle prop on its label
+        const cell = tabRow.firstElementChild || tabRow;
+        const tabLabel = document.createElement('span');
+        tabLabel.className = 'color-trim-tab-label';
+        tabLabel.textContent = label;
+        moveInstrumentation(tabRow, tab);
+        moveCellInstrumentation(cell, tabLabel);
+        tab.append(tabLabel);
+      } else {
+        tab.textContent = label;
+      }
       tab.setAttribute('role', 'tab');
       tab.setAttribute('aria-controls', panelId);
       tab.addEventListener('click', () => selectTab(tabs, panels, i));

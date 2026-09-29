@@ -15,6 +15,9 @@ const parsers = {
   'color-trim': colorTrimParser,
 };
 
+// Documents are placed under the site folder (AEM site path /content/innovationlabgt)
+const SITE_FOLDER = '/innovationlabgt';
+
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json
 const PAGE_TEMPLATE = {
   name: 'bronco',
@@ -164,11 +167,11 @@ export default {
     WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
     localizeImageUrls(main, params.originalURL);
 
-    // 6. Sanitized path (root URL maps to /index)
+    // 6. Sanitized path under the site folder (root URL maps to /index)
     const rawPath = new URL(params.originalURL).pathname
       .replace(/\/$/, '')
       .replace(/\.html?$/, '');
-    const path = WebImporter.FileUtils.sanitizePath(rawPath === '' ? '/index' : rawPath);
+    const path = WebImporter.FileUtils.sanitizePath(`${SITE_FOLDER}${rawPath === '' ? '/index' : rawPath}`);
 
     return [{
       element: main,
