@@ -59,7 +59,9 @@
         "table",
         "text",
         "title",
-        "video"
+        "video",
+        "hero-vehicle",
+        "color-trim"
       ]
     }
   ]

@@ -1,0 +1,20 @@
+{
+  "variantName": "color-trim",
+  "baseBlock": "accordion",
+  "canonicalModel": "collection",
+  "visualCharacteristics": {
+    "colorScheme": "dark-blue header bar, white body",
+    "density": "medium",
+    "purpose": "trim color/upholstery/wheel swatch explorer",
+    "imagePattern": "small rectangular swatches, 5-col grid",
+    "structure": "collapsible title + 4 category tabs + swatch grid (image + name + code)"
+  },
+  "contentPattern": "collapsible title + 4 category tabs + swatch grid (image + name + code). Block rows: title, expanded (true/false). Item rows: category (exterior | interior | upholstery | wheels) | image (+alt) | swatchName | code",
+  "usage": {
+    "pagesUsing": ["http://127.0.0.1:8765/bronco.html"],
+    "reuseCount": 4,
+    "lastUsed": "2026-09-29"
+  },
+  "options": [],
+  "memberVariantIds": ["color-trim"]
+}

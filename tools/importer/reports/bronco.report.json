@@ -1,0 +1,15 @@
+{
+  "status": "success",
+  "url": "http://127.0.0.1:8765/bronco.html",
+  "path": "bronco",
+  "timestamp": "2026-09-29T18:21:24.223Z",
+  "title": "2026 Bronco | Ford Color & Trim",
+  "template": "bronco",
+  "blocks": [
+    "hero-vehicle",
+    "color-trim",
+    "color-trim",
+    "color-trim",
+    "color-trim"
+  ]
+}

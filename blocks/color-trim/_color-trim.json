@@ -1,0 +1,114 @@
+{
+  "definitions": [
+    {
+      "title": "Color Trim",
+      "id": "color-trim",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Color Trim",
+              "model": "color-trim",
+              "filter": "color-trim",
+              "title": "Trim Name",
+              "expanded": false
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Color Trim Swatch",
+      "id": "color-trim-swatch",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Swatch",
+              "model": "color-trim-swatch",
+              "category": "exterior",
+              "swatchName": "Swatch Name",
+              "code": "XX"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "color-trim",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "title",
+          "value": "",
+          "label": "Trim Title",
+          "required": true
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "expanded",
+          "value": false,
+          "label": "Expanded (open by default)"
+        }
+      ]
+    },
+    {
+      "id": "color-trim-swatch",
+      "fields": [
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "category",
+          "value": "exterior",
+          "label": "Category",
+          "options": [
+            { "name": "Exterior Colors", "value": "exterior" },
+            { "name": "Interiors", "value": "interior" },
+            { "name": "Upholsteries", "value": "upholstery" },
+            { "name": "Wheels", "value": "wheels" }
+          ]
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Image",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Alt",
+          "value": ""
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "swatchName",
+          "value": "",
+          "label": "Name"
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "code",
+          "value": "",
+          "label": "Code"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "color-trim",
+      "components": ["color-trim-swatch"]
+    }
+  ]
+}
