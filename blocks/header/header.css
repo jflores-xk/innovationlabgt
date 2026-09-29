@@ -136,7 +136,7 @@ header .nav-hamburger button {
   align-items: center;
   justify-content: center;
   width: 32px;
-  height: 32px;
+  height: 30px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -167,6 +167,7 @@ header .nav-hamburger-icon::before,
 header .nav-hamburger-icon::after {
   content: '';
   position: absolute;
+  transition: top 0.2s ease, transform 0.2s ease;
 }
 
 header .nav-hamburger-icon::before {
@@ -177,11 +178,60 @@ header .nav-hamburger-icon::after {
   top: 6px;
 }
 
+/* hamburger morphs to a cross while the menu is open */
+header .nav-hamburger-icon {
+  transition: background-color 0.2s ease;
+}
+
+header nav[aria-expanded='true'] .nav-hamburger-icon {
+  background: transparent;
+}
+
+header nav[aria-expanded='true'] .nav-hamburger-icon::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+header nav[aria-expanded='true'] .nav-hamburger-icon::after {
+  top: 0;
+  transform: rotate(-45deg);
+}
+
+/* open mobile menu: full-width stacked list below the brand row (no overlay) */
+header:has(nav[aria-expanded='true']) {
+  height: auto;
+}
+
+header nav[aria-expanded='true'] {
+  padding-bottom: 0;
+}
+
 header nav[aria-expanded='true'] .nav-sections,
 header nav[aria-expanded='true'] .nav-tools {
   display: flex;
-  flex-basis: 100%;
-  padding-top: 16px;
+  flex-basis: calc(100% + 48px);
+  flex-direction: column;
+  gap: 0;
+  margin: 0 -24px;
+}
+
+header nav[aria-expanded='true'] .nav-sections {
+  margin-top: 14px;
+  border-top: 1px solid var(--header-border-color);
+}
+
+header nav[aria-expanded='true'] .nav-sections a:any-link,
+header nav[aria-expanded='true'] .nav-tools a:any-link {
+  display: block;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--header-border-color);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 18px;
+}
+
+header nav[aria-expanded='true'] .nav-tools li:last-child a:any-link {
+  border-bottom: 0;
 }
 
 @media (width >= 900px) {
@@ -194,13 +244,37 @@ header nav[aria-expanded='true'] .nav-tools {
     display: none;
   }
 
+  /* desktop resets use the same selectors as the open mobile menu */
+  header nav[aria-expanded='true'] {
+    padding-bottom: 14px;
+  }
+
   header .nav-sections,
   header .nav-tools,
   header nav[aria-expanded='true'] .nav-sections,
   header nav[aria-expanded='true'] .nav-tools {
     display: flex;
     flex-basis: auto;
-    margin-left: auto;
-    padding-top: 0;
+    flex-direction: row;
+    margin: 0 0 0 auto;
+    border-top: 0;
+  }
+
+  header nav[aria-expanded='true'] .nav-sections {
+    gap: 18px;
+  }
+
+  header nav[aria-expanded='true'] .nav-tools {
+    gap: 14px;
+  }
+
+  header nav[aria-expanded='true'] .nav-sections a:any-link,
+  header nav[aria-expanded='true'] .nav-tools a:any-link {
+    display: inline;
+    padding: 0;
+    border-bottom: 0;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 14px;
   }
 }
