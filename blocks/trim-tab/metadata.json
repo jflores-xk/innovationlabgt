@@ -9,7 +9,7 @@
     "imagePattern": "small rectangular swatches, 5-col grid",
     "structure": "tab (shared tab row per trim section) + swatch grid (image + name + code)"
   },
-  "contentPattern": "Placed inside a trim section (section model trim-section: trimTitle, trimExpanded). Block row: tabTitle. Color item rows: image (+alt) | swatchName | code",
+  "contentPattern": "Placed inside a trim section (section model trim-section: trimName, trimExpanded). Block row: tabName. Color item rows: image (+alt) | swatchName | code",
   "usage": {
     "pagesUsing": ["http://127.0.0.1:8765/bronco.html"],
     "reuseCount": 24,

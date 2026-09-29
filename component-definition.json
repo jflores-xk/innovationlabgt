@@ -87,7 +87,7 @@
                   "name": "Trim",
                   "model": "trim-section",
                   "filter": "trim-section",
-                  "trimTitle": "Trim Name",
+                  "trimName": "Trim Name",
                   "trimExpanded": false
                 }
               }
@@ -498,7 +498,7 @@
           }
         },
         {
-          "title": "Tab",
+          "title": "Trim Tab",
           "id": "trim-tab",
           "plugins": {
             "xwalk": {
@@ -508,7 +508,7 @@
                   "name": "Trim Tab",
                   "model": "trim-tab",
                   "filter": "trim-tab",
-                  "tabTitle": "Tab Title"
+                  "tabName": "Tab Title"
                 }
               }
             }

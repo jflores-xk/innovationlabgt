@@ -151,7 +151,7 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "trimTitle",
+        "name": "trimName",
         "label": "Trim Title",
         "description": "Shown on the accordion bar",
         "required": true
@@ -695,7 +695,7 @@
       {
         "component": "text",
         "valueType": "string",
-        "name": "tabTitle",
+        "name": "tabName",
         "value": "",
         "label": "Tab Title",
         "required": true

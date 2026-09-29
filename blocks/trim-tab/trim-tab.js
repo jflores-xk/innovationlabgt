@@ -5,7 +5,7 @@
  * all trim-tab blocks in a section share one tab row.
  *
  * Authored rows (xwalk container block):
- *   block field  -> single-cell row: tabTitle
+ *   block field  -> single-cell row: tabName
  *   color items  -> multi-cell rows: image (+alt) | swatchName | code
  */
 
@@ -127,7 +127,7 @@ function syncTabs(container) {
     tab.type = 'button';
     tab.className = 'trim-tab-button';
     tab.id = `${panel.id}-tab`;
-    tab.textContent = panel.dataset.tabTitle;
+    tab.textContent = panel.dataset.tabName;
     tab.setAttribute('role', 'tab');
     tab.setAttribute('aria-controls', panel.id);
     tab.addEventListener('click', () => selectTab(tablist, panel));
@@ -184,7 +184,7 @@ export default function decorate(block) {
   rows.filter(isItemRow).forEach((row) => grid.append(buildSwatch(row)));
 
   block.id = `trim-tab-${tabCount}`;
-  block.dataset.tabTitle = textOf(titleRow);
+  block.dataset.tabName = textOf(titleRow);
   block.setAttribute('role', 'tabpanel');
   block.tabIndex = 0;
   block.replaceChildren(grid);

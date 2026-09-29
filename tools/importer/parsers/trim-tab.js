@@ -7,7 +7,7 @@
  *   > img + p.swatch-name ("Name*,** " + span.swatch-code "(CODE)").
  * One block per tab panel; the trim itself becomes a section (bronco-trim-sections transformer).
  * xwalk container block (see blocks/trim-tab/_trim-tab.json + trim-tab.js):
- *   block row (1 cell): tabTitle
+ *   block row (1 cell): tabName
  *   color item rows (3 cells): image (+imageAlt collapsed) | swatchName | code
  */
 const clean = (s) => (s || '').replace(/\s+/g, ' ').trim();
@@ -30,7 +30,7 @@ function tabLabel(panel) {
 
 export default function parse(element, { document }) {
   const title = tabLabel(element);
-  const cells = [[title ? hinted(document, 'tabTitle', title) : '']];
+  const cells = [[title ? hinted(document, 'tabName', title) : '']];
 
   element.querySelectorAll('li.swatch').forEach((swatch) => {
     const img = swatch.querySelector('img');

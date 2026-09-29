@@ -86,13 +86,13 @@ function buildAutoBlocks() {
 let trimSectionCount = 0;
 
 /**
- * Decorates a trim section (section metadata "trimTitle") as an accordion panel:
+ * Decorates a trim section (section metadata "trimName") as an accordion panel:
  * a toggle bar with the trim title and a collapsible body holding the section's
  * content. Its trim-tab blocks render as the body's tabs. Safe to call repeatedly.
  * @param {Element} section The section element
  */
 export function decorateTrimSection(section) {
-  const title = section.dataset.trimtitle ?? section.dataset.trimTitle;
+  const title = section.dataset.trimname ?? section.dataset.trimName;
   if (title === undefined || section.querySelector(':scope > .trim-section-heading')) return;
   trimSectionCount += 1;
   const id = `trim-section-${trimSectionCount}`;

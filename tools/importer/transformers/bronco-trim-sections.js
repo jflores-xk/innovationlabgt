@@ -8,7 +8,7 @@
  * parser produced from its tab panels:
  *   <hr> (except the first trim, which follows the section break before section.trims)
  *   trim-tab blocks
- *   Section Metadata: blockModelId=trim-section, trimTitle, trimExpanded
+ *   Section Metadata: blockModelId=trim-section, trimName, trimExpanded
  * Runs in afterTransform, once parsers have replaced the tab panels with blocks.
  */
 const clean = (s) => (s || '').replace(/\s+/g, ' ').trim();
@@ -21,7 +21,7 @@ export default function transform(hookName, element, payload) {
 
   trims.forEach((trim, index) => {
     const titleEl = trim.querySelector(':scope > summary h2, :scope > summary h3, :scope > summary');
-    const trimTitle = clean(titleEl?.textContent);
+    const trimName = clean(titleEl?.textContent);
     const trimExpanded = trim.hasAttribute('open') ? 'true' : 'false';
     const blocks = [...trim.querySelectorAll('table')].filter((t) => !t.parentElement.closest('table'));
 
@@ -30,7 +30,7 @@ export default function transform(hookName, element, payload) {
     nodes.push(...blocks);
     nodes.push(WebImporter.Blocks.createBlock(document, {
       name: 'Section Metadata',
-      cells: { blockModelId: 'trim-section', trimTitle, trimExpanded },
+      cells: { blockModelId: 'trim-section', trimName, trimExpanded },
     }));
     trim.replaceWith(...nodes);
   });

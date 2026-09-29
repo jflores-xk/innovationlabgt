@@ -25,7 +25,7 @@
               "name": "Trim",
               "model": "trim-section",
               "filter": "trim-section",
-              "trimTitle": "Trim Name",
+              "trimName": "Trim Name",
               "trimExpanded": false
             }
           }
@@ -66,7 +66,7 @@
         {
           "component": "text",
           "valueType": "string",
-          "name": "trimTitle",
+          "name": "trimName",
           "label": "Trim Title",
           "description": "Shown on the accordion bar",
           "required": true

@@ -88,7 +88,7 @@ var CustomImportScript = (() => {
   }
   function parse2(element, { document: document2 }) {
     const title = tabLabel(element);
-    const cells = [[title ? hinted(document2, "tabTitle", title) : ""]];
+    const cells = [[title ? hinted(document2, "tabName", title) : ""]];
     element.querySelectorAll("li.swatch").forEach((swatch) => {
       const img = swatch.querySelector("img");
       const nameEl = swatch.querySelector(".swatch-name");
@@ -142,7 +142,7 @@ var CustomImportScript = (() => {
     const trims = [...element.querySelectorAll("details.trim")];
     trims.forEach((trim, index) => {
       const titleEl = trim.querySelector(":scope > summary h2, :scope > summary h3, :scope > summary");
-      const trimTitle = clean2(titleEl == null ? void 0 : titleEl.textContent);
+      const trimName = clean2(titleEl == null ? void 0 : titleEl.textContent);
       const trimExpanded = trim.hasAttribute("open") ? "true" : "false";
       const blocks = [...trim.querySelectorAll("table")].filter((t) => !t.parentElement.closest("table"));
       const nodes = [];
@@ -150,7 +150,7 @@ var CustomImportScript = (() => {
       nodes.push(...blocks);
       nodes.push(WebImporter.Blocks.createBlock(document2, {
         name: "Section Metadata",
-        cells: { blockModelId: "trim-section", trimTitle, trimExpanded }
+        cells: { blockModelId: "trim-section", trimName, trimExpanded }
       }));
       trim.replaceWith(...nodes);
     });

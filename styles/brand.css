@@ -7,7 +7,7 @@
   --link-color: #2861a4;
   --link-hover-color: #133a7c;
   --section-padding: 24px;
-  --nav-height: 59px;
+  --nav-height: 88px; /* brand bar 29px + main row 59px */
   --heading-size-xxl: 64px;
   --heading-size-xl: 22px;
   --heading-size-l: 18.72px;

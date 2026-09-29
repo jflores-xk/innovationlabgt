@@ -1,7 +1,7 @@
 {
   "definitions": [
     {
-      "title": "Tab",
+      "title": "Trim Tab",
       "id": "trim-tab",
       "plugins": {
         "xwalk": {
@@ -11,7 +11,7 @@
               "name": "Trim Tab",
               "model": "trim-tab",
               "filter": "trim-tab",
-              "tabTitle": "Tab Title"
+              "tabName": "Tab Title"
             }
           }
         }
@@ -42,7 +42,7 @@
         {
           "component": "text",
           "valueType": "string",
-          "name": "tabTitle",
+          "name": "tabName",
           "value": "",
           "label": "Tab Title",
           "required": true
@@ -86,7 +86,9 @@
   "filters": [
     {
       "id": "trim-tab",
-      "components": ["trim-color"]
+      "components": [
+        "trim-color"
+      ]
     }
   ]
 }
