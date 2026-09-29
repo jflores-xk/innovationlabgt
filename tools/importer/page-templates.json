@@ -1,0 +1,59 @@
+{
+  "templates": [
+    {
+      "name": "bronco",
+      "urls": [
+        "http://127.0.0.1:8765/bronco.html"
+      ],
+      "representativeUrl": "http://127.0.0.1:8765/bronco.html",
+      "description": "2026 Bronco Color & Trim page: vehicle hero plus per-trim color/interior/upholstery/wheel swatch explorers",
+      "blocks": [
+        {
+          "name": "hero-vehicle",
+          "instances": [
+            "section.vehicle-hero"
+          ]
+        },
+        {
+          "name": "color-trim",
+          "instances": [
+            "section.trims > details.trim"
+          ]
+        }
+      ],
+      "urlPattern": "/*",
+      "sections": [
+        {
+          "id": "rc1",
+          "name": "Vehicle Hero",
+          "selector": [
+            "section.vehicle-hero"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-vehicle"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc2",
+          "name": "Trims",
+          "selector": [
+            "section.trims"
+          ],
+          "style": null,
+          "blocks": [
+            "color-trim"
+          ],
+          "defaultContent": [
+            "section.trims > div.availability",
+            "section.trims > div.disclaimer"
+          ]
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "projectType": "xwalk"
+  }
+}

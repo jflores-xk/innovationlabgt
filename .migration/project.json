@@ -1,0 +1,15 @@
+{
+  "type": "xwalk",
+  "sites": {
+    "innovationlabgt": {
+      "previewOrg": "jflores-xk",
+      "previewSite": "innovationlabgt",
+      "contentHostUrl": "author-p10610-e1658046.adobeaemcloud.com",
+      "aemSitePath": "/content/innovationlabgt",
+      "aemAssetsFolderPath": "/content/dam/innovationlabgt",
+      "aemSiteName": "innovationlabgt",
+      "aemSiteTitle": "Innovation Lab GT",
+      "libraryUrl": "https://main--sta-xwalk-boilerplate--aemysites.aem.page/tools/sidekick/library.json"
+    }
+  }
+}

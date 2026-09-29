@@ -212,6 +212,84 @@
     ]
   },
   {
+    "id": "color-trim",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "value": "",
+        "label": "Trim Title",
+        "required": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "expanded",
+        "value": false,
+        "label": "Expanded (open by default)"
+      }
+    ]
+  },
+  {
+    "id": "color-trim-swatch",
+    "fields": [
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "category",
+        "value": "exterior",
+        "label": "Category",
+        "options": [
+          {
+            "name": "Exterior Colors",
+            "value": "exterior"
+          },
+          {
+            "name": "Interiors",
+            "value": "interior"
+          },
+          {
+            "name": "Upholsteries",
+            "value": "upholstery"
+          },
+          {
+            "name": "Wheels",
+            "value": "wheels"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "swatchName",
+        "value": "",
+        "label": "Name"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "code",
+        "value": "",
+        "label": "Code"
+      }
+    ]
+  },
+  {
     "id": "columns",
     "fields": [
       {
@@ -278,6 +356,32 @@
         "component": "aem-content",
         "name": "reference",
         "label": "Reference"
+      }
+    ]
+  },
+  {
+    "id": "hero-vehicle",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
       }
     ]
   },

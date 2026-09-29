@@ -1,0 +1,219 @@
+/*
+ * Color Trim
+ * Full-bleed navy collapsible bar per trim; open body holds category tabs + swatch grid.
+ * Values extracted from the source (section.trims > details.trim).
+ * Colors are exposed as block-scoped custom properties.
+ */
+
+/* full-bleed: break out of the section max-width container, stack flush */
+.color-trim-container .color-trim-wrapper {
+  max-width: unset;
+  margin: 0;
+  padding: 0;
+}
+
+.color-trim {
+  --color-trim-bar-bg: var(--brand-navy);
+  --color-trim-bar-fg: #fff;
+  --color-trim-muted: var(--muted-text-color);
+  --color-trim-active: #555;
+  --color-trim-divider: var(--divider-color);
+  --color-trim-tab-divider: #eee;
+
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--color-trim-bar-fg);
+}
+
+/* collapsible bar */
+.color-trim .color-trim-heading {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.color-trim .color-trim-toggle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 52px;
+  margin: 0;
+  padding: 0 56px 0 24px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--color-trim-bar-bg);
+  color: var(--color-trim-bar-fg);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-size-xl);
+  font-weight: 400;
+  line-height: 52px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.color-trim .color-trim-toggle:hover,
+.color-trim .color-trim-toggle:focus {
+  background-color: var(--color-trim-bar-bg);
+  color: var(--color-trim-bar-fg);
+}
+
+.color-trim .color-trim-toggle:focus-visible {
+  outline: 2px solid var(--color-trim-bar-fg);
+  outline-offset: -4px;
+}
+
+.color-trim .color-trim-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* chevron: down when collapsed, up when open */
+.color-trim .color-trim-chevron {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  box-sizing: content-box;
+  width: 9px;
+  height: 9px;
+  border: solid currentcolor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.color-trim .color-trim-toggle[aria-expanded='true'] .color-trim-chevron {
+  top: 24px;
+  transform: rotate(-135deg);
+}
+
+/* body */
+.color-trim .color-trim-body {
+  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+
+.color-trim .color-trim-body[hidden] {
+  display: none;
+}
+
+/* tabs */
+.color-trim .color-trim-tabs {
+  display: flex;
+  margin-bottom: 28px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--color-trim-divider);
+}
+
+.color-trim .color-trim-tab {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 14px 16px;
+  border: 0;
+  border-right: 1px solid var(--color-trim-tab-divider);
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: var(--background-color);
+  color: var(--color-trim-muted);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  line-height: normal;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.color-trim .color-trim-tab:hover,
+.color-trim .color-trim-tab:focus {
+  background: var(--background-color);
+  color: var(--color-trim-active);
+}
+
+.color-trim .color-trim-tab[aria-selected='true'] {
+  border-bottom-color: var(--color-trim-bar-bg);
+  color: var(--color-trim-active);
+}
+
+.color-trim .color-trim-panel[hidden] {
+  display: none;
+}
+
+.color-trim .color-trim-panel:focus-visible {
+  outline: 2px solid var(--color-trim-bar-bg);
+  outline-offset: 4px;
+}
+
+/* swatch grid */
+.color-trim .color-trim-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.color-trim .color-trim-swatch {
+  margin: 0;
+}
+
+.color-trim .color-trim-swatch-image picture,
+.color-trim .color-trim-swatch-image img {
+  display: block;
+  width: 100%;
+}
+
+.color-trim .color-trim-swatch-image img {
+  aspect-ratio: 8 / 3;
+  height: auto;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.color-trim .color-trim-swatch-label {
+  margin: 6px 0 0;
+  color: var(--color-trim-muted);
+  font-size: 12px;
+  line-height: normal;
+}
+
+.color-trim .color-trim-swatch-name {
+  font-weight: 700;
+}
+
+.color-trim .color-trim-swatch-code {
+  font-weight: 400;
+}
+
+@media (width >= 600px) {
+  .color-trim .color-trim-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  .color-trim .color-trim-toggle {
+    padding: 0 56px 0 112px;
+  }
+
+  .color-trim .color-trim-chevron {
+    right: 36px;
+  }
+
+  .color-trim .color-trim-body {
+    padding: 0 56px 32px 112px;
+  }
+
+  .color-trim .color-trim-tab {
+    flex: 0 0 190px;
+    padding: 14px 0;
+  }
+
+  .color-trim .color-trim-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

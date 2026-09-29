@@ -1,0 +1,20 @@
+{
+  "variantName": "hero-vehicle",
+  "baseBlock": "hero",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": {
+    "colorScheme": "light",
+    "density": "spacious",
+    "purpose": "vehicle-model-intro",
+    "imagePattern": "foreground product image right, transparent bg",
+    "structure": "h1 (2 lines) + image, 2-column"
+  },
+  "contentPattern": "h1 (2 lines) + image, 2-column",
+  "usage": {
+    "pagesUsing": ["http://127.0.0.1:8765/bronco.html"],
+    "reuseCount": 1,
+    "lastUsed": "2026-09-29"
+  },
+  "options": [],
+  "memberVariantIds": ["hero-vehicle"]
+}

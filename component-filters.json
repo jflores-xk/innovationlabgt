@@ -24,7 +24,9 @@
       "table",
       "text",
       "title",
-      "video"
+      "video",
+      "hero-vehicle",
+      "color-trim"
     ]
   },
   {
@@ -43,6 +45,12 @@
     "id": "carousel",
     "components": [
       "carousel-item"
+    ]
+  },
+  {
+    "id": "color-trim",
+    "components": [
+      "color-trim-swatch"
     ]
   },
   {
