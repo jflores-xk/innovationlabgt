@@ -136,8 +136,32 @@
           {
             "name": "Highlight",
             "value": "highlight"
+          },
+          {
+            "name": "Trim Notes",
+            "value": "trim-notes"
           }
         ]
+      }
+    ]
+  },
+  {
+    "id": "trim-section",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "trimTitle",
+        "label": "Trim Title",
+        "description": "Shown on the accordion bar",
+        "required": true
+      },
+      {
+        "component": "boolean",
+        "valueType": "boolean",
+        "name": "trimExpanded",
+        "label": "Open by default",
+        "value": false
       }
     ]
   },
@@ -662,6 +686,52 @@
         "value": "",
         "label": "Content",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "trim-tab",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "tabTitle",
+        "value": "",
+        "label": "Tab Title",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "trim-color",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "swatchName",
+        "value": "",
+        "label": "Name"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "code",
+        "value": "",
+        "label": "Code"
       }
     ]
   },

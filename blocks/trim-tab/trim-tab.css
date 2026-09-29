@@ -1,0 +1,139 @@
+/*
+ * Trim Tab
+ * Tab row + swatch grid inside a trim section (accordion panel).
+ * Values carried over from the color & trim reference design.
+ */
+
+.trim-section {
+  --trim-tab-muted: var(--muted-text-color);
+  --trim-tab-active: #555;
+  --trim-tab-divider: var(--divider-color);
+  --trim-tab-button-divider: #eee;
+  --trim-tab-accent: var(--brand-navy);
+}
+
+/* wrappers sit flush inside the trim body */
+main .section .trim-tab-wrapper {
+  max-width: unset;
+  margin: 0;
+  padding: 0;
+}
+
+/* shared tab row */
+.trim-tab-list {
+  display: flex;
+  margin-bottom: 28px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--trim-tab-divider);
+}
+
+.trim-tab-list[hidden] {
+  display: none;
+}
+
+.trim-tab-list .trim-tab-button {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 14px 16px;
+  border: 0;
+  border-right: 1px solid var(--trim-tab-button-divider);
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: var(--background-color);
+  color: var(--trim-tab-muted);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  line-height: normal;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.trim-tab-list .trim-tab-button:hover,
+.trim-tab-list .trim-tab-button:focus {
+  background: var(--background-color);
+  color: var(--trim-tab-active);
+}
+
+.trim-tab-list .trim-tab-button:focus-visible {
+  outline: 2px solid var(--trim-tab-accent);
+  outline-offset: -2px;
+}
+
+.trim-tab-list .trim-tab-button[aria-selected='true'] {
+  border-bottom-color: var(--trim-tab-accent);
+  color: var(--trim-tab-active);
+}
+
+/* tab panel */
+.trim-tab[hidden] {
+  display: none;
+}
+
+.trim-tab:focus-visible {
+  outline: 2px solid var(--trim-tab-accent);
+  outline-offset: 4px;
+}
+
+/* swatch grid */
+.trim-tab .trim-tab-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trim-tab .trim-tab-swatch {
+  margin: 0;
+}
+
+.trim-tab .trim-tab-swatch-image picture,
+.trim-tab .trim-tab-swatch-image img {
+  display: block;
+  width: 100%;
+}
+
+.trim-tab .trim-tab-swatch-image img {
+  aspect-ratio: 8 / 3;
+  height: auto;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.trim-tab .trim-tab-swatch-label {
+  margin: 6px 0 0;
+  color: var(--trim-tab-muted);
+  font-size: 12px;
+  line-height: normal;
+}
+
+.trim-tab .trim-tab-swatch-name {
+  font-weight: 700;
+}
+
+.trim-tab .trim-tab-swatch-code {
+  font-weight: 400;
+}
+
+@media (width >= 600px) {
+  .trim-tab .trim-tab-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (width >= 900px) {
+  /* 190px tabs, shrinking evenly when more tabs are authored than fit */
+  .trim-tab-list .trim-tab-button {
+    flex: 0 1 190px;
+    min-width: 0;
+    padding: 14px 8px;
+  }
+
+  .trim-tab .trim-tab-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

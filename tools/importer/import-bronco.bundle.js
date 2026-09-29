@@ -72,7 +72,7 @@ var CustomImportScript = (() => {
     element.replaceWith(block);
   }
 
-  // tools/importer/parsers/color-trim.js
+  // tools/importer/parsers/trim-tab.js
   var clean = (s) => (s || "").replace(/\s+/g, " ").trim();
   function hinted(document2, field, content) {
     const frag = document2.createDocumentFragment();
@@ -80,46 +80,37 @@ var CustomImportScript = (() => {
     frag.appendChild(typeof content === "string" ? document2.createTextNode(content) : content);
     return frag;
   }
-  function tabLabel(element, panel) {
+  function tabLabel(panel) {
     var _a;
-    const button = panel.id ? element.querySelector(`[role="tab"][data-tab="${panel.id}"], [role="tab"][aria-controls="${panel.id}"]`) : null;
+    const trim = panel.closest("details.trim") || panel.ownerDocument;
+    const button = panel.id ? trim.querySelector(`[role="tab"][data-tab="${panel.id}"], [role="tab"][aria-controls="${panel.id}"]`) : null;
     return clean(button == null ? void 0 : button.textContent) || clean((_a = panel.querySelector("h3, h4")) == null ? void 0 : _a.textContent);
   }
   function parse2(element, { document: document2 }) {
-    const titleEl = element.querySelector(":scope > summary h2, :scope > summary h3, :scope > summary");
-    const title = clean(titleEl == null ? void 0 : titleEl.textContent);
-    const expanded = element.hasAttribute("open") ? "true" : "false";
-    const panels = Array.from(element.querySelectorAll(".tab-panel"));
-    const cells = [];
-    cells.push([title ? hinted(document2, "title", title) : ""]);
-    cells.push([hinted(document2, "expanded", expanded)]);
-    const scopes = panels.length ? panels : [element];
-    scopes.forEach((panel) => {
-      const label = panels.length ? tabLabel(element, panel) : "";
-      if (label) cells.push([hinted(document2, "tabTitle", label)]);
-      panel.querySelectorAll("li.swatch").forEach((swatch) => {
-        const img = swatch.querySelector("img");
-        const nameEl = swatch.querySelector(".swatch-name");
-        const codeEl = swatch.querySelector(".swatch-code");
-        let name = "";
-        if (nameEl) {
-          const copy = nameEl.cloneNode(true);
-          copy.querySelectorAll(".swatch-code").forEach((c) => c.remove());
-          name = clean(copy.textContent);
-        }
-        const code = clean(codeEl == null ? void 0 : codeEl.textContent).replace(/^\((.*)\)$/, "$1").trim();
-        cells.push([
-          img ? hinted(document2, "image", img) : "",
-          name ? hinted(document2, "swatchName", name) : "",
-          code ? hinted(document2, "code", code) : ""
-        ]);
-      });
+    const title = tabLabel(element);
+    const cells = [[title ? hinted(document2, "tabTitle", title) : ""]];
+    element.querySelectorAll("li.swatch").forEach((swatch) => {
+      const img = swatch.querySelector("img");
+      const nameEl = swatch.querySelector(".swatch-name");
+      const codeEl = swatch.querySelector(".swatch-code");
+      let name = "";
+      if (nameEl) {
+        const copy = nameEl.cloneNode(true);
+        copy.querySelectorAll(".swatch-code").forEach((c) => c.remove());
+        name = clean(copy.textContent);
+      }
+      const code = clean(codeEl == null ? void 0 : codeEl.textContent).replace(/^\((.*)\)$/, "$1").trim();
+      cells.push([
+        img ? hinted(document2, "image", img) : "",
+        name ? hinted(document2, "swatchName", name) : "",
+        code ? hinted(document2, "code", code) : ""
+      ]);
     });
-    if (!title && cells.length === 2) {
+    if (!title && cells.length === 1) {
       element.replaceWith(...element.childNodes);
       return;
     }
-    const block = WebImporter.Blocks.createBlock(document2, { name: "color-trim", cells });
+    const block = WebImporter.Blocks.createBlock(document2, { name: "trim-tab", cells });
     element.replaceWith(block);
   }
 
@@ -143,6 +134,28 @@ var CustomImportScript = (() => {
     }
   }
 
+  // tools/importer/transformers/bronco-trim-sections.js
+  var clean2 = (s) => (s || "").replace(/\s+/g, " ").trim();
+  function transform2(hookName, element, payload) {
+    if (hookName !== "afterTransform") return;
+    const document2 = payload && payload.document || element.ownerDocument;
+    const trims = [...element.querySelectorAll("details.trim")];
+    trims.forEach((trim, index) => {
+      const titleEl = trim.querySelector(":scope > summary h2, :scope > summary h3, :scope > summary");
+      const trimTitle = clean2(titleEl == null ? void 0 : titleEl.textContent);
+      const trimExpanded = trim.hasAttribute("open") ? "true" : "false";
+      const blocks = [...trim.querySelectorAll("table")].filter((t) => !t.parentElement.closest("table"));
+      const nodes = [];
+      if (index > 0) nodes.push(document2.createElement("hr"));
+      nodes.push(...blocks);
+      nodes.push(WebImporter.Blocks.createBlock(document2, {
+        name: "Section Metadata",
+        cells: { blockModelId: "trim-section", trimTitle, trimExpanded }
+      }));
+      trim.replaceWith(...nodes);
+    });
+  }
+
   // tools/importer/transformers/bronco-sections.js
   var SECTION_MARKER_ATTR = "data-excat-section-id";
   function querySection(root, selectors) {
@@ -153,7 +166,7 @@ var CustomImportScript = (() => {
     }
     return null;
   }
-  function transform2(hookName, element, payload) {
+  function transform3(hookName, element, payload) {
     const sections = payload && payload.template && payload.template.sections || [];
     if (hookName === "beforeTransform") {
       for (let i = sections.length - 1; i >= 0; i -= 1) {
@@ -189,47 +202,73 @@ var CustomImportScript = (() => {
   // tools/importer/import-bronco.js
   var parsers = {
     "hero-vehicle": parse,
-    "color-trim": parse2
+    "trim-tab": parse2
   };
   var SITE_FOLDER = "/innovationlabgt";
   var PAGE_TEMPLATE = {
     name: "bronco",
-    description: "2026 Bronco Color & Trim page: vehicle hero plus per-trim color/interior/upholstery/wheel swatch explorers",
+    description: "2026 Bronco Color & Trim page: vehicle hero, one trim section (accordion panel) per trim holding trim-tab blocks of color swatches, and a notes section",
     urls: [
       "http://127.0.0.1:8765/bronco.html"
     ],
     blocks: [
       {
         name: "hero-vehicle",
-        instances: ["section.vehicle-hero"]
+        instances: [
+          "section.vehicle-hero"
+        ]
       },
       {
-        name: "color-trim",
-        instances: ["section.trims > details.trim"]
+        name: "trim-tab",
+        instances: [
+          "section.trims > details.trim .tab-panel"
+        ]
       }
     ],
     sections: [
       {
         id: "rc1",
         name: "Vehicle Hero",
-        selector: ["section.vehicle-hero"],
+        selector: [
+          "section.vehicle-hero"
+        ],
         style: null,
-        blocks: ["hero-vehicle"],
+        blocks: [
+          "hero-vehicle"
+        ],
         defaultContent: []
       },
       {
         id: "rc2",
         name: "Trims",
-        selector: ["section.trims"],
+        selector: [
+          "section.trims"
+        ],
         style: null,
-        blocks: ["color-trim"],
-        defaultContent: ["section.trims > div.availability", "section.trims > div.disclaimer"]
+        blocks: [
+          "trim-tab"
+        ],
+        defaultContent: []
+      },
+      {
+        id: "rc3",
+        name: "Trim Notes",
+        selector: [
+          "section.trims > div.availability"
+        ],
+        style: "trim-notes",
+        blocks: [],
+        defaultContent: [
+          "section.trims > div.availability",
+          "section.trims > div.disclaimer"
+        ]
       }
     ]
   };
   var transformers = [
     transform,
-    ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform2] : []
+    transform2,
+    ...PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [transform3] : []
   ];
   function executeTransformers(hookName, element, payload) {
     const enhancedPayload = __spreadProps(__spreadValues({}, payload), {

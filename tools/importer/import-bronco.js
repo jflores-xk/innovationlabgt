@@ -3,16 +3,17 @@
 
 // PARSER IMPORTS
 import heroVehicleParser from './parsers/hero-vehicle.js';
-import colorTrimParser from './parsers/color-trim.js';
+import trimTabParser from './parsers/trim-tab.js';
 
 // TRANSFORMER IMPORTS
 import cleanupTransformer from './transformers/bronco-cleanup.js';
+import trimSectionsTransformer from './transformers/bronco-trim-sections.js';
 import sectionsTransformer from './transformers/bronco-sections.js';
 
 // PARSER REGISTRY
 const parsers = {
   'hero-vehicle': heroVehicleParser,
-  'color-trim': colorTrimParser,
+  'trim-tab': trimTabParser,
 };
 
 // Documents are placed under the site folder (AEM site path /content/innovationlabgt)
@@ -21,43 +22,69 @@ const SITE_FOLDER = '/innovationlabgt';
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json
 const PAGE_TEMPLATE = {
   name: 'bronco',
-  description: '2026 Bronco Color & Trim page: vehicle hero plus per-trim color/interior/upholstery/wheel swatch explorers',
+  description: '2026 Bronco Color & Trim page: vehicle hero, one trim section (accordion panel) per trim holding trim-tab blocks of color swatches, and a notes section',
   urls: [
-    'http://127.0.0.1:8765/bronco.html',
+    'http://127.0.0.1:8765/bronco.html'
   ],
   blocks: [
     {
       name: 'hero-vehicle',
-      instances: ['section.vehicle-hero'],
+      instances: [
+        'section.vehicle-hero'
+      ]
     },
     {
-      name: 'color-trim',
-      instances: ['section.trims > details.trim'],
-    },
+      name: 'trim-tab',
+      instances: [
+        'section.trims > details.trim .tab-panel'
+      ]
+    }
   ],
   sections: [
     {
       id: 'rc1',
       name: 'Vehicle Hero',
-      selector: ['section.vehicle-hero'],
+      selector: [
+        'section.vehicle-hero'
+      ],
       style: null,
-      blocks: ['hero-vehicle'],
-      defaultContent: [],
+      blocks: [
+        'hero-vehicle'
+      ],
+      defaultContent: []
     },
     {
       id: 'rc2',
       name: 'Trims',
-      selector: ['section.trims'],
+      selector: [
+        'section.trims'
+      ],
       style: null,
-      blocks: ['color-trim'],
-      defaultContent: ['section.trims > div.availability', 'section.trims > div.disclaimer'],
+      blocks: [
+        'trim-tab'
+      ],
+      defaultContent: []
     },
-  ],
+    {
+      id: 'rc3',
+      name: 'Trim Notes',
+      selector: [
+        'section.trims > div.availability'
+      ],
+      style: 'trim-notes',
+      blocks: [],
+      defaultContent: [
+        'section.trims > div.availability',
+        'section.trims > div.disclaimer'
+      ]
+    }
+  ]
 };
 
 // TRANSFORMER REGISTRY - section transformer runs after cleanup
 const transformers = [
   cleanupTransformer,
+  trimSectionsTransformer,
   ...(PAGE_TEMPLATE.sections && PAGE_TEMPLATE.sections.length > 1 ? [sectionsTransformer] : []),
 ];
 

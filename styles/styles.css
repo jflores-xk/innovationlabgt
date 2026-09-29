@@ -272,8 +272,104 @@ main .section.highlight {
   padding: 40px 0;
 }
 
-/* color & trim section default content (availability chart + disclaimer) */
-main .color-trim-container .default-content-wrapper {
+/* trim sections: accordion panels stacked flush, full-bleed navy bars */
+main > .section.trim-section {
+  margin: 0;
+  border-top: 1px solid var(--background-color);
+}
+
+main > .section.trim-section + .section {
+  margin-top: 0;
+}
+
+.trim-section .trim-section-heading {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.trim-section .trim-section-toggle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 52px;
+  margin: 0;
+  padding: 0 56px 0 24px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--brand-navy);
+  color: #fff;
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-size-xl);
+  font-weight: 400;
+  line-height: 52px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trim-section .trim-section-toggle:hover,
+.trim-section .trim-section-toggle:focus {
+  background-color: var(--brand-navy);
+  color: #fff;
+}
+
+.trim-section .trim-section-toggle:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: -4px;
+}
+
+.trim-section .trim-section-title {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* chevron: down when collapsed, up when open */
+.trim-section .trim-section-chevron {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  box-sizing: content-box;
+  width: 9px;
+  height: 9px;
+  border: solid currentcolor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.trim-section .trim-section-toggle[aria-expanded='true'] .trim-section-chevron {
+  top: 24px;
+  transform: rotate(-135deg);
+}
+
+main > .section.trim-section > .trim-section-body {
+  box-sizing: border-box;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 32px;
+}
+
+main > .section.trim-section > .trim-section-body[hidden] {
+  display: none;
+}
+
+@media (width >= 900px) {
+  .trim-section .trim-section-toggle {
+    padding: 0 56px 0 112px;
+  }
+
+  .trim-section .trim-section-chevron {
+    right: 36px;
+  }
+
+  main > .section.trim-section > .trim-section-body {
+    padding: 0 56px 32px 112px;
+  }
+}
+
+/* trim notes section (availability chart + disclaimer), style "trim-notes" */
+main .section.trim-notes .default-content-wrapper {
   box-sizing: border-box;
   max-width: 1100px;
   padding: 12px 56px 28px;
@@ -282,25 +378,25 @@ main .color-trim-container .default-content-wrapper {
   color: var(--muted-text-color);
 }
 
-main .color-trim-container .default-content-wrapper p {
+main .section.trim-notes .default-content-wrapper p {
   margin: 2px 0;
 }
 
-main .color-trim-container .default-content-wrapper .button-container {
+main .section.trim-notes .default-content-wrapper .button-container {
   display: flex;
   justify-content: flex-end;
   margin: 0;
 }
 
-main .color-trim-container .default-content-wrapper .button-container a.button {
+main .section.trim-notes .default-content-wrapper .button-container a.button {
   margin: 0;
 }
 
-main .color-trim-container .default-content-wrapper .button-container + .button-container {
+main .section.trim-notes .default-content-wrapper .button-container + .button-container {
   margin: 8px 0 12px;
 }
 
-main .color-trim-container .default-content-wrapper .button-container + .button-container a.button:any-link {
+main .section.trim-notes .default-content-wrapper .button-container + .button-container a.button:any-link {
   padding: 0;
   border: 0;
   background: none;
@@ -308,13 +404,13 @@ main .color-trim-container .default-content-wrapper .button-container + .button-
   font-size: var(--body-font-size-xs);
 }
 
-main .color-trim-container .default-content-wrapper .button-container + .button-container a.button:hover {
+main .section.trim-notes .default-content-wrapper .button-container + .button-container a.button:hover {
   color: var(--link-hover-color);
   text-decoration: underline;
 }
 
 @media (width < 900px) {
-  main .color-trim-container .default-content-wrapper {
+  main .section.trim-notes .default-content-wrapper {
     padding: 12px 24px 28px;
   }
 }

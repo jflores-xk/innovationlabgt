@@ -208,9 +208,11 @@
     padding: 0 56px 32px 112px;
   }
 
+  /* 190px tabs, shrinking evenly when more tabs are authored than fit */
   .color-trim .color-trim-tab {
-    flex: 0 0 190px;
-    padding: 14px 0;
+    flex: 0 1 190px;
+    min-width: 0;
+    padding: 14px 8px;
   }
 
   .color-trim .color-trim-grid {

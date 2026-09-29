@@ -2,7 +2,8 @@
   {
     "id": "main",
     "components": [
-      "section"
+      "section",
+      "trim-section"
     ]
   },
   {
@@ -25,8 +26,13 @@
       "text",
       "title",
       "video",
-      "hero-vehicle",
-      "color-trim"
+      "hero-vehicle"
+    ]
+  },
+  {
+    "id": "trim-section",
+    "components": [
+      "trim-tab"
     ]
   },
   {
@@ -97,6 +103,12 @@
     "id": "tabs",
     "components": [
       "tabs-item"
+    ]
+  },
+  {
+    "id": "trim-tab",
+    "components": [
+      "trim-color"
     ]
   },
   {
