@@ -13,6 +13,24 @@
           }
         }
       }
+    },
+    {
+      "title": "Trim",
+      "id": "trim-section",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/section/v1/section",
+            "template": {
+              "name": "Trim",
+              "model": "trim-section",
+              "filter": "trim-section",
+              "trimName": "Trim Name",
+              "trimExpanded": false
+            }
+          }
+        }
+      }
     }
   ],
   "models": [
@@ -33,8 +51,32 @@
             {
               "name": "Highlight",
               "value": "highlight"
+            },
+            {
+              "name": "Trim Notes",
+              "value": "trim-notes"
             }
           ]
+        }
+      ]
+    },
+    {
+      "id": "trim-section",
+      "fields": [
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "trimName",
+          "label": "Trim Title",
+          "description": "Shown on the accordion bar",
+          "required": true
+        },
+        {
+          "component": "boolean",
+          "valueType": "boolean",
+          "name": "trimExpanded",
+          "label": "Open by default",
+          "value": false
         }
       ]
     }
@@ -60,8 +102,13 @@
         "text",
         "title",
         "video",
-        "hero-vehicle",
-        "color-trim"
+        "hero-vehicle"
+      ]
+    },
+    {
+      "id": "trim-section",
+      "components": [
+        "trim-tab"
       ]
     }
   ]

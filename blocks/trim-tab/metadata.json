@@ -1,0 +1,20 @@
+{
+  "variantName": "trim-tab",
+  "baseBlock": "tabs",
+  "canonicalModel": "collection",
+  "visualCharacteristics": {
+    "colorScheme": "white body, navy active-tab underline",
+    "density": "medium",
+    "purpose": "one tab of a trim accordion panel: color/upholstery/wheel/top/package swatches",
+    "imagePattern": "small rectangular swatches, 5-col grid",
+    "structure": "tab (shared tab row per trim section) + swatch grid (image + name + code)"
+  },
+  "contentPattern": "Placed inside a trim section (section model trim-section: trimName, trimExpanded). Block row: tabName. Color item rows: image (+alt) | swatchName | code",
+  "usage": {
+    "pagesUsing": ["http://127.0.0.1:8765/bronco.html"],
+    "reuseCount": 24,
+    "lastUsed": "2026-09-29"
+  },
+  "options": [],
+  "memberVariantIds": ["trim-tab"]
+}

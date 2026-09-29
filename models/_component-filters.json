@@ -1,7 +1,10 @@
 [
   {
     "id": "main",
-    "components": ["section"]
+    "components": [
+      "section",
+      "trim-section"
+    ]
   },
   {
     "...": "./_section.json#/filters"

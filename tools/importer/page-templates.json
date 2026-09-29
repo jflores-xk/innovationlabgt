@@ -6,7 +6,7 @@
         "http://127.0.0.1:8765/bronco.html"
       ],
       "representativeUrl": "http://127.0.0.1:8765/bronco.html",
-      "description": "2026 Bronco Color & Trim page: vehicle hero plus per-trim color/interior/upholstery/wheel swatch explorers",
+      "description": "2026 Bronco Color & Trim page: vehicle hero, one trim section (accordion panel) per trim holding trim-tab blocks of color swatches, and a notes section",
       "blocks": [
         {
           "name": "hero-vehicle",
@@ -15,9 +15,9 @@
           ]
         },
         {
-          "name": "color-trim",
+          "name": "trim-tab",
           "instances": [
-            "section.trims > details.trim"
+            "section.trims > details.trim .tab-panel"
           ]
         }
       ],
@@ -43,8 +43,18 @@
           ],
           "style": null,
           "blocks": [
-            "color-trim"
+            "trim-tab"
           ],
+          "defaultContent": []
+        },
+        {
+          "id": "rc3",
+          "name": "Trim Notes",
+          "selector": [
+            "section.trims > div.availability"
+          ],
+          "style": "trim-notes",
+          "blocks": [],
           "defaultContent": [
             "section.trims > div.availability",
             "section.trims > div.disclaimer"

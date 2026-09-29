@@ -83,6 +83,58 @@ function buildAutoBlocks() {
   }
 }
 
+let trimSectionCount = 0;
+
+/**
+ * Decorates a trim section (section metadata "trimName") as an accordion panel:
+ * a toggle bar with the trim title and a collapsible body holding the section's
+ * content. Its trim-tab blocks render as the body's tabs. Safe to call repeatedly.
+ * @param {Element} section The section element
+ */
+export function decorateTrimSection(section) {
+  const title = section.dataset.trimname ?? section.dataset.trimName;
+  if (title === undefined || section.querySelector(':scope > .trim-section-heading')) return;
+  trimSectionCount += 1;
+  const id = `trim-section-${trimSectionCount}`;
+  section.classList.add('trim-section');
+
+  const heading = document.createElement('h2');
+  heading.className = 'trim-section-heading';
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'trim-section-toggle';
+  toggle.id = `${id}-toggle`;
+  toggle.setAttribute('aria-controls', `${id}-body`);
+  const label = document.createElement('span');
+  label.className = 'trim-section-title';
+  label.textContent = title;
+  const chevron = document.createElement('span');
+  chevron.className = 'trim-section-chevron';
+  chevron.setAttribute('aria-hidden', 'true');
+  toggle.append(label, chevron);
+  heading.append(toggle);
+
+  const body = document.createElement('div');
+  body.className = 'trim-section-body';
+  body.id = `${id}-body`;
+  body.setAttribute('role', 'region');
+  body.setAttribute('aria-labelledby', toggle.id);
+  body.append(...section.children);
+
+  const setExpanded = (expanded) => {
+    toggle.setAttribute('aria-expanded', expanded);
+    body.hidden = !expanded;
+  };
+  setExpanded(/^(true|yes)$/i.test(section.dataset.trimexpanded ?? section.dataset.trimExpanded ?? ''));
+  toggle.addEventListener('click', () => setExpanded(toggle.getAttribute('aria-expanded') !== 'true'));
+
+  section.append(heading, body);
+}
+
+function decorateTrimSections(main) {
+  main.querySelectorAll(':scope > .section').forEach(decorateTrimSection);
+}
+
 function a11yLinks(main) {
   const links = main.querySelectorAll('a');
   links.forEach((link) => {
@@ -107,6 +159,7 @@ export function decorateMain(main) {
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateTrimSections(main);
   // add aria-label to links
   a11yLinks(main);
 }
