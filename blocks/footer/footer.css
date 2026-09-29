@@ -18,8 +18,8 @@ footer .footer-bar {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 20px 24px;
+  gap: 4px;
+  padding: 20px 24px 15px;
 }
 
 footer .footer-bar p {
@@ -43,6 +43,12 @@ footer .footer-bar a:hover {
   text-decoration: none;
 }
 
+/* mobile: 24px-tall tap targets */
+footer .footer-bar a:any-link {
+  display: inline-block;
+  padding: 5px 0;
+}
+
 @media (width >= 900px) {
   footer .footer-bar {
     flex-direction: row;
@@ -54,5 +60,10 @@ footer .footer-bar a:hover {
 
   footer .footer-bar p {
     margin: 12px 0;
+  }
+
+  footer .footer-bar a:any-link {
+    display: inline;
+    padding: 0;
   }
 }

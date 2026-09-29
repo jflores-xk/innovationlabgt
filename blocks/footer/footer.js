@@ -9,16 +9,10 @@ const SECTION_CLASSES = ['copyright', 'legal'];
  */
 async function fetchFooter() {
   const siteRoot = window.location.pathname.match(/^\/content\/[^/]+(?=\/)/)?.[0];
-  const paths = [siteRoot && `${siteRoot}/footer.plain.html`, '/content/footer.plain.html', '/footer.plain.html']
-    .filter((p, i, all) => p && all.indexOf(p) === i);
-  // eslint-disable-next-line no-restricted-syntax
-  for (const path of paths) {
-    // eslint-disable-next-line no-await-in-loop
-    const resp = await fetch(path);
-    // eslint-disable-next-line no-await-in-loop
-    if (resp.ok) return resp.text();
-  }
-  return null;
+  let resp = siteRoot ? await fetch(`${siteRoot}/footer.plain.html`) : null;
+  if (!resp?.ok) resp = await fetch('/content/footer.plain.html');
+  if (!resp.ok) resp = await fetch('/footer.plain.html');
+  return resp.ok ? resp.text() : null;
 }
 
 /**
