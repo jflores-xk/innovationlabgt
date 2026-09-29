@@ -73,29 +73,17 @@ var CustomImportScript = (() => {
   }
 
   // tools/importer/parsers/color-trim.js
-  var CATEGORY_KEYS = ["exterior", "interior", "upholstery", "wheels"];
-  function resolveCategory(panel) {
-    var _a;
-    const id = (panel.id || "").toLowerCase();
-    const suffix = id.includes("-") ? id.slice(id.lastIndexOf("-") + 1) : id;
-    if (CATEGORY_KEYS.includes(suffix)) return suffix;
-    if (/^exterior/.test(suffix)) return "exterior";
-    if (/^interior/.test(suffix)) return "interior";
-    if (/^upholster/.test(suffix)) return "upholstery";
-    if (/^wheel/.test(suffix)) return "wheels";
-    const label = (((_a = panel.querySelector("h3, h4")) == null ? void 0 : _a.textContent) || "").toLowerCase();
-    if (label.includes("exterior")) return "exterior";
-    if (label.includes("interior")) return "interior";
-    if (label.includes("upholster")) return "upholstery";
-    if (label.includes("wheel")) return "wheels";
-    return "exterior";
-  }
   var clean = (s) => (s || "").replace(/\s+/g, " ").trim();
   function hinted(document2, field, content) {
     const frag = document2.createDocumentFragment();
     frag.appendChild(document2.createComment(` field:${field} `));
     frag.appendChild(typeof content === "string" ? document2.createTextNode(content) : content);
     return frag;
+  }
+  function tabLabel(element, panel) {
+    var _a;
+    const button = panel.id ? element.querySelector(`[role="tab"][data-tab="${panel.id}"], [role="tab"][aria-controls="${panel.id}"]`) : null;
+    return clean(button == null ? void 0 : button.textContent) || clean((_a = panel.querySelector("h3, h4")) == null ? void 0 : _a.textContent);
   }
   function parse2(element, { document: document2 }) {
     const titleEl = element.querySelector(":scope > summary h2, :scope > summary h3, :scope > summary");
@@ -107,7 +95,8 @@ var CustomImportScript = (() => {
     cells.push([hinted(document2, "expanded", expanded)]);
     const scopes = panels.length ? panels : [element];
     scopes.forEach((panel) => {
-      const category = panels.length ? resolveCategory(panel) : "exterior";
+      const label = panels.length ? tabLabel(element, panel) : "";
+      if (label) cells.push([hinted(document2, "tabTitle", label)]);
       panel.querySelectorAll("li.swatch").forEach((swatch) => {
         const img = swatch.querySelector("img");
         const nameEl = swatch.querySelector(".swatch-name");
@@ -120,7 +109,6 @@ var CustomImportScript = (() => {
         }
         const code = clean(codeEl == null ? void 0 : codeEl.textContent).replace(/^\((.*)\)$/, "$1").trim();
         cells.push([
-          hinted(document2, "category", category),
           img ? hinted(document2, "image", img) : "",
           name ? hinted(document2, "swatchName", name) : "",
           code ? hinted(document2, "code", code) : ""
@@ -203,6 +191,7 @@ var CustomImportScript = (() => {
     "hero-vehicle": parse,
     "color-trim": parse2
   };
+  var SITE_FOLDER = "/innovationlabgt";
   var PAGE_TEMPLATE = {
     name: "bronco",
     description: "2026 Bronco Color & Trim page: vehicle hero plus per-trim color/interior/upholstery/wheel swatch explorers",
@@ -311,7 +300,7 @@ var CustomImportScript = (() => {
       WebImporter.rules.adjustImageUrls(main, url, params.originalURL);
       localizeImageUrls(main, params.originalURL);
       const rawPath = new URL(params.originalURL).pathname.replace(/\/$/, "").replace(/\.html?$/, "");
-      const path = WebImporter.FileUtils.sanitizePath(rawPath === "" ? "/index" : rawPath);
+      const path = WebImporter.FileUtils.sanitizePath(`${SITE_FOLDER}${rawPath === "" ? "/index" : rawPath}`);
       return [{
         element: main,
         path,

@@ -19,6 +19,22 @@
       }
     },
     {
+      "title": "Color Trim Tab",
+      "id": "color-trim-tab",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Tab",
+              "model": "color-trim-tab",
+              "tabTitle": "Tab Title"
+            }
+          }
+        }
+      }
+    },
+    {
       "title": "Color Trim Swatch",
       "id": "color-trim-swatch",
       "plugins": {
@@ -28,7 +44,6 @@
             "template": {
               "name": "Swatch",
               "model": "color-trim-swatch",
-              "category": "exterior",
               "swatchName": "Swatch Name",
               "code": "XX"
             }
@@ -59,21 +74,21 @@
       ]
     },
     {
-      "id": "color-trim-swatch",
+      "id": "color-trim-tab",
       "fields": [
         {
-          "component": "select",
+          "component": "text",
           "valueType": "string",
-          "name": "category",
-          "value": "exterior",
-          "label": "Category",
-          "options": [
-            { "name": "Exterior Colors", "value": "exterior" },
-            { "name": "Interiors", "value": "interior" },
-            { "name": "Upholsteries", "value": "upholstery" },
-            { "name": "Wheels", "value": "wheels" }
-          ]
-        },
+          "name": "tabTitle",
+          "value": "",
+          "label": "Tab Title",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "color-trim-swatch",
+      "fields": [
         {
           "component": "reference",
           "valueType": "string",
@@ -108,7 +123,10 @@
   "filters": [
     {
       "id": "color-trim",
-      "components": ["color-trim-swatch"]
+      "components": [
+        "color-trim-tab",
+        "color-trim-swatch"
+      ]
     }
   ]
 }

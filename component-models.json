@@ -232,33 +232,21 @@
     ]
   },
   {
-    "id": "color-trim-swatch",
+    "id": "color-trim-tab",
     "fields": [
       {
-        "component": "select",
+        "component": "text",
         "valueType": "string",
-        "name": "category",
-        "value": "exterior",
-        "label": "Category",
-        "options": [
-          {
-            "name": "Exterior Colors",
-            "value": "exterior"
-          },
-          {
-            "name": "Interiors",
-            "value": "interior"
-          },
-          {
-            "name": "Upholsteries",
-            "value": "upholstery"
-          },
-          {
-            "name": "Wheels",
-            "value": "wheels"
-          }
-        ]
-      },
+        "name": "tabTitle",
+        "value": "",
+        "label": "Tab Title",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "color-trim-swatch",
+    "fields": [
       {
         "component": "reference",
         "valueType": "string",

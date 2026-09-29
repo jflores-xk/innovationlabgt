@@ -50,6 +50,7 @@
   {
     "id": "color-trim",
     "components": [
+      "color-trim-tab",
       "color-trim-swatch"
     ]
   },
