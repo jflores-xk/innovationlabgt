@@ -5,14 +5,23 @@ const isDesktop = window.matchMedia('(width >= 900px)');
 const SECTION_CLASSES = ['brandbar', 'brand', 'sections', 'tools'];
 
 /**
- * Fetches the nav fragment: /content first (local preview), then the site root (EDS).
+ * Fetches the nav fragment, trying in order: the AEM site root the page lives in
+ * (e.g. /content/<site>/nav on the author / Universal Editor), /content (local preview),
+ * then the site root (published EDS).
  * @returns {Promise<{html: string, base: string}|null>}
  */
 async function fetchNav() {
-  let resp = await fetch('/content/nav.plain.html');
-  if (!resp.ok) resp = await fetch('/nav.plain.html');
-  if (!resp.ok) return null;
-  return { html: await resp.text(), base: resp.url };
+  const siteRoot = window.location.pathname.match(/^\/content\/[^/]+(?=\/)/)?.[0];
+  const paths = [siteRoot && `${siteRoot}/nav.plain.html`, '/content/nav.plain.html', '/nav.plain.html']
+    .filter((p, i, all) => p && all.indexOf(p) === i);
+  // eslint-disable-next-line no-restricted-syntax
+  for (const path of paths) {
+    // eslint-disable-next-line no-await-in-loop
+    const resp = await fetch(path);
+    // eslint-disable-next-line no-await-in-loop
+    if (resp.ok) return { html: await resp.text(), base: resp.url };
+  }
+  return null;
 }
 
 /**

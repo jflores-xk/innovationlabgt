@@ -303,12 +303,13 @@ var CustomImportScript = (() => {
     console.log(`Found ${pageBlocks.length} block instances on page`);
     return pageBlocks;
   }
+  var IMAGE_ORIGIN = "https://main--innovationlabgt--jflores-xk.aem.page";
   function localizeImageUrls(main, originalURL) {
     const { origin } = new URL(originalURL);
     main.querySelectorAll("img").forEach((img) => {
       const src = img.getAttribute("src");
       if (src && src.startsWith(`${origin}/images/bronco/`)) {
-        img.setAttribute("src", src.substring(origin.length));
+        img.setAttribute("src", `${IMAGE_ORIGIN}${src.substring(origin.length)}`);
       }
     });
   }

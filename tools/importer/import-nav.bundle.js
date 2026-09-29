@@ -23,6 +23,7 @@ var CustomImportScript = (() => {
   __export(import_nav_exports, {
     default: () => import_nav_default
   });
+  var IMAGE_ORIGIN = "https://main--innovationlabgt--jflores-xk.aem.page";
   var SECTION_SELECTORS = [".nav-brandbar", ".nav-brand", ".nav-sections", ".nav-tools"];
   var import_nav_default = {
     transform: (payload) => {
@@ -38,7 +39,7 @@ var CustomImportScript = (() => {
       });
       main.querySelectorAll("img").forEach((img) => {
         const file = (img.getAttribute("src") || "").split("?")[0].split("/").pop();
-        if (file) img.setAttribute("src", `images/${file}`);
+        if (file) img.setAttribute("src", `${IMAGE_ORIGIN}/images/bronco/${file}`);
       });
       return [{ element: main, path: "/nav", report: { title: "nav" } }];
     }

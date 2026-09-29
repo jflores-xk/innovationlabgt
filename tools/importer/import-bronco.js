@@ -139,10 +139,13 @@ function findBlocksOnPage(document, template) {
   return pageBlocks;
 }
 
+// public origin serving the project code bus, where the page images are committed
+// (images/bronco/); AEM ingests them into Assets from here on upload
+const IMAGE_ORIGIN = 'https://main--innovationlabgt--jflores-xk.aem.page';
+
 /**
  * The source is a temporary reference server; its images are mirrored in the
- * project under /images/bronco/, so strip the source origin to keep them
- * root-relative (served from the project code bus).
+ * project under /images/bronco/, so point them at the public code bus instead.
  * @param {Element} main - The main element
  * @param {string} originalURL - The source page URL
  */
@@ -151,7 +154,7 @@ function localizeImageUrls(main, originalURL) {
   main.querySelectorAll('img').forEach((img) => {
     const src = img.getAttribute('src');
     if (src && src.startsWith(`${origin}/images/bronco/`)) {
-      img.setAttribute('src', src.substring(origin.length));
+      img.setAttribute('src', `${IMAGE_ORIGIN}${src.substring(origin.length)}`);
     }
   });
 }
