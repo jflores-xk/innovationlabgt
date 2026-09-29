@@ -87,10 +87,12 @@ function decorateBrand(section) {
 function toggleMenu(nav, forceExpanded = null) {
   const expanded = forceExpanded !== null ? forceExpanded : nav.getAttribute('aria-expanded') !== 'true';
   const button = nav.querySelector('.nav-hamburger button');
-  nav.setAttribute('aria-expanded', expanded && !isDesktop.matches ? 'true' : 'false');
-  document.body.style.overflowY = expanded && !isDesktop.matches ? 'hidden' : '';
-  const label = expanded && !isDesktop.matches ? 'Close navigation' : 'Open navigation';
-  if (button) button.setAttribute('aria-label', label);
+  const open = expanded && !isDesktop.matches;
+  nav.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (button) {
+    button.setAttribute('aria-expanded', open ? 'true' : 'false');
+    button.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  }
 }
 
 /**
@@ -128,16 +130,15 @@ export default async function decorate(block) {
   nav.id = 'nav';
   nav.className = 'nav-main';
   nav.setAttribute('aria-label', 'Main');
-  nav.append(...[brand, ...lists].filter(Boolean));
-
-  // hamburger (mobile only) toggles sections + tools
+  // hamburger (mobile only) toggles sections + tools; sits after the brand so it
+  // stays on the brand row and comes before the links in keyboard order
   const hamburger = document.createElement('div');
   hamburger.className = 'nav-hamburger';
-  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
+  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-expanded="false" aria-label="Open navigation">
       <span class="nav-hamburger-icon"></span>
     </button>`;
   hamburger.querySelector('button').addEventListener('click', () => toggleMenu(nav));
-  nav.append(hamburger);
+  nav.append(...[brand, hamburger, ...lists].filter(Boolean));
   nav.setAttribute('aria-expanded', 'false');
 
   // close the mobile menu on Escape and when resizing to desktop
